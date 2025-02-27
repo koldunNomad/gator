@@ -41,7 +41,8 @@ func main() {
 		registeredCommands: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
-	cmds.register("register", heandlerRegister)
+	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
 
 	// Получаем аргументы
 	if len(os.Args) < 2 {
