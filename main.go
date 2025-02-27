@@ -1,13 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"database/sql"
 	"gator/internal/config"
+	"gator/internal/database"
 	"log"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 type state struct {
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -18,8 +22,17 @@ func main() {
 		log.Fatalf("error reading config: %v", err)
 	}
 
+	db, err := sql.Open("postgres", cfg.Db_url)
+	if err != nil {
+		log.Fatalf("error connecting to db: %v", err)
+	}
+	defer db.Close()
+
+	dbQueries := database.New(db)
+
 	// Записываем данные из конфига в структуру
 	programState := &state{
+		db:  dbQueries,
 		cfg: &cfg,
 	}
 
@@ -28,6 +41,7 @@ func main() {
 		registeredCommands: make(map[string]func(*state, command) error),
 	}
 	cmds.register("login", handlerLogin)
+	cmds.register("register", heandlerRegister)
 
 	// Получаем аргументы
 	if len(os.Args) < 2 {
@@ -41,6 +55,6 @@ func main() {
 	// Передаём в run текущее состояние и структуру с аргументами
 	err = cmds.run(programState, command{Name: cmdName, Args: cmdArgs})
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 }
