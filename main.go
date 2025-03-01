@@ -44,6 +44,9 @@ func main() {
 	cmds.register("register", handlerRegister)
 	cmds.register("reset", handlerReset)
 	cmds.register("users", handlerUsers)
+	cmds.register("agg", handlerAgg)
+	cmds.register("addfeed", handlerFeed)
+	cmds.register("feeds", handlerListFeeds)
 
 	// Получаем аргументы
 	if len(os.Args) < 2 {
@@ -59,4 +62,5 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
