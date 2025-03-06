@@ -1,5 +1,4 @@
-module gator
-
+module github.com/koldunNomad/gator
 go 1.24.0
 
 require (
