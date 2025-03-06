@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Выводит список пользователей
 func handlerUsers(s *state, cmd command) error {
 	ctxt := context.Background()
 	users, err := s.db.GetUsers(ctxt)

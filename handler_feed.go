@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// Выводит список лент
 func handlerListFeeds(s *state, cmd command) error {
 	if len(cmd.Args) != 0 {
 		return fmt.Errorf("usage: %s", cmd.Name)
@@ -33,7 +34,8 @@ func handlerListFeeds(s *state, cmd command) error {
 	return nil
 }
 
-func handlerFeed(s *state, cmd command) error {
+// Создать ленту
+func handlerFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.Args) != 2 {
 		return fmt.Errorf("usage: %s <name> <url>", cmd.Name)
 	}
@@ -42,22 +44,33 @@ func handlerFeed(s *state, cmd command) error {
 
 	ctxt := context.Background()
 
-	user, err := s.db.GetUser(ctxt, s.cfg.Current_user_name)
-	if err != nil {
-		return err
-	}
+	userID := user.ID
+	feedID := uuid.New()
 
 	feed, err := s.db.CreateFeed(ctxt, database.CreateFeedParams{
-		ID:        uuid.New(),
+		ID:        feedID,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 		Name:      name,
 		Url:       url,
-		UserID:    user.ID,
+		UserID:    userID,
 	})
 	if err != nil {
 		return fmt.Errorf("couldn't create feed: %w", err)
 	}
+
+	feedFollow, err := s.db.CreateFeedFollow(ctxt, database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		UserID:    userID,
+		FeedID:    feedID,
+	})
+	if err != nil {
+		return fmt.Errorf("couldn't create feed follow: %w", err)
+	}
+
+	fmt.Println(feedFollow)
 
 	fmt.Println("Feed created successfully:")
 	printFeed(feed, user)
