@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"gator/internal/database"
 	"log"
 	"time"
+
+	"github.com/koldunNomad/gator/internal/database"
 
 	"github.com/google/uuid"
 )

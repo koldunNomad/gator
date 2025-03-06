@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"gator/internal/database"
+
+	"github.com/koldunNomad/gator/internal/database"
 )
 
 func headerunfollow(s *state, cmd command, user database.User) error {

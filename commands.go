@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"errors"
-	"gator/internal/database"
+
+	"github.com/koldunNomad/gator/internal/database"
 )
 
 type command struct {

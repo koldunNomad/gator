@@ -3,8 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"gator/internal/database"
 	"strconv"
+
+	"github.com/koldunNomad/gator/internal/database"
 )
 
 func handlerBrowse(s *state, cmd command, user database.User) error {
